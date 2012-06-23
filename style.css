@@ -1,0 +1,267 @@
+/* CSS Document */
+html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var,optgroup{font-style:inherit;font-weight:inherit;}del,ins{text-decoration:none;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:baseline;}sub{vertical-align:baseline;}legend{color:#000;}input,button,textarea,select,optgroup,option{font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}input,button,textarea,select{font-size:100%;}
+a {outline: none;} /* Gets rid of Firefox's dotted borders */
+a img {border: none;} /* Gets rid of IE's blue borders */
+
+html, body {
+	font: 13px "Segoe UI", Helvetica, Arial, sans-serif;
+	height: 100%;
+	background-color: #f0edea;
+	
+}
+
+h1 {
+	font-size: 30px;	
+}
+
+h2 {
+	font-weight: normal;
+	font-size: 25px;
+}
+
+a {
+	color: #600;
+}
+
+.hr {
+	border-bottom: 1px solid #dad4c7;
+	height: 1px;
+}
+
+#wrap {
+	height: 100%;
+	width: 90%;
+	margin: 0 auto;
+}
+
+#menuwrap {
+	width: 330px;
+	float: left;
+}
+
+#statusbar {
+	height: 15px;
+}
+
+#middle {
+	width: 10px;
+	float: left;
+}
+
+#chatwrap {
+	float: left;
+}
+
+.corner {
+	width: 10px;
+	height: 10px;
+}
+
+.leftside {
+	background: url(images/left.png) repeat-y;
+	width: 10px;
+	float: left;
+	height: 100%;
+}
+
+.rightside {
+	background: url(images/right.png) repeat-y;
+	width: 10px;
+	float: right;
+	height: 100%;
+}
+
+.topside { 
+	background: url(images/top.png) repeat-x;
+	height: 10px;
+}
+.bottomside {
+	background: url(images/bottom.png) repeat-x;
+	height: 10px;
+}
+.main {
+	background-color: #e4dfd1;
+	width: 100%;
+}
+
+.content {
+	float: left;
+	height: 100%;
+	overflow: visible;
+	margin: 0px auto;
+}
+.innercontent {
+	overflow: auto;
+}
+
+.topleft {
+	background: url(images/1.png) no-repeat;
+	float: left;
+}
+.topright {
+	float: right;
+	background: url(images/2.png) no-repeat;
+}
+.bottomright {
+	float: right;
+	background: url(images/3.png) no-repeat;
+}
+.bottomleft {
+	float: left;
+	background: url(images/4.png) no-repeat;
+}
+
+.left {float: left;}
+.right {float: right;}
+.clear {clear: both;}
+
+div {outline: 0; border: 0;}
+
+
+.chatbg, .chatbg-me {	
+	margin: 4px 10px 4px 15px;
+	-moz-box-shadow: 3px 3px 3px #dad4c7;
+	-webkit-box-shadow: 3px 3px 3px #dad4c7;
+	box-shadow: 3px 3px 3px #dad4c7;
+	padding: 3px 5px 3px 5px;
+	background-color: #fff;
+}
+
+.chatbg-me {
+	background-color: #f0edea;
+}
+
+.newtaskbg, .completetaskbg, .giveuptaskbg {
+	margin: 4px 0px;
+	-moz-box-shadow: 3px 3px 3px #dad4c7;
+	-webkit-box-shadow: 3px 3px 3px #dad4c7;
+	box-shadow: 3px 3px 3px #dad4c7;
+	padding: 8px;
+	background-color: #fff9ca;
+}
+
+.completetaskbg {
+	background-color: #d1ffca;
+}
+
+.giveuptaskbg {
+	background-color: #f1aaaa;
+}
+
+.user, #opentask-listbg, #files-bg, .opentask{
+	margin: 8px 0px;
+	-moz-box-shadow: 3px 3px 3px #dad4c7;
+	-webkit-box-shadow: 3px 3px 3px #dad4c7;
+	box-shadow: 3px 3px 3px #dad4c7;
+	padding: 4px;
+	background-color: #fff;
+}
+
+#user-list ul li, .opentask ul li, #file-list li {
+	padding: 4px;
+	border-bottom: 1px solid #fefefe;
+	background-color: #eee;
+}
+
+.useractive {
+	background: #fff url(/images/dot.png) no-repeat 252px 0px; 
+}
+
+textarea {
+	border:0;
+	outline:0;
+}
+#msgbg{
+	margin-top: 8px;
+	-moz-box-shadow: 3px 3px 3px #dad4c7;
+	-webkit-box-shadow: 3px 3px 3px #dad4c7;
+	box-shadow: 3px 3px 3px #dad4c7;
+	padding: 5px 5px 0 5px;
+	background-color: #fff;
+}
+
+
+#dndnote {
+	display: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	line-height: 100%;
+	text-align: center;
+
+	top: 0;
+	left: 0;
+}
+
+#msg {
+	width: 100%;
+}
+
+strong {
+	font-weight: bold;
+}
+
+.arrow {
+	font-size: 14px;
+	color: #ccc;
+}
+
+.expand {
+	cursor: pointer;
+	font-weight: bold;
+}
+
+
+
+
+/* Login Page */
+
+#loginbox {
+	width: 400px;
+	margin: 0 auto;
+	font-size: 32px;
+}
+
+#loginbox input {
+	padding: 5px;
+	background-color: #e4dfd1;
+	border: 0;
+	border: 1px solid #ccc;
+}
+
+#loginbox input:focus{
+	background-color: #dad4c7;
+	outline: 0;
+}
+
+#loginbox #notice {
+	padding: 10px 0;
+	display: none;
+}
+
+#loginbox a {
+	color: #000;
+	padding-top: 15px;
+	text-decoration: none;
+}
+
+#modal {
+	display: none;
+	z-index: 99;
+	opacity: 0.8;
+	background: #000 url(/images/upload.png) center center no-repeat;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+#filesUpload {
+	z-index: 100;
+	position: absolute;
+	top: 0;	
+	left: 0;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+}

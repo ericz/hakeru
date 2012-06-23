@@ -1,0 +1,3 @@
+RemoveType .php .php3 .php4 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi
+RemoveHandler .php .php3 .php4 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi
+php_flag engine off
