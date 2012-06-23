@@ -94,8 +94,8 @@ messageHandlers['user_joined'] = function(data){
 }
 
 messageHandlers['zip'] = function(data){
-	
-	me.sessionId = data.session_id;
+	console.log('i am', data.sessionId);
+	me.sessionId = data.sessionId;
 	$("#spinner").remove();
 	$('#user-list').empty();
 	$('#opentask-list-permenant').empty();
@@ -235,22 +235,22 @@ function identifyTaskGroup(text){
 
 function acceptButtonClick(e){
 	e.preventDefault();
-	socket.send('message',JSON.stringify({type:"accept_task", data: {task_id: $(this).attr("task_id")}}));
+	socket.emit('message',JSON.stringify({type:"accept_task", data: {task_id: $(this).attr("task_id")}}));
 }
 
 function deleteButtonClick(e){
 	e.preventDefault();
-	socket.send('message',JSON.stringify({type:"delete_task", data: {task_id: $(this).attr("task_id")}}));
+	socket.emit('message',JSON.stringify({type:"delete_task", data: {task_id: $(this).attr("task_id")}}));
 }
 
 function giveUpClick(e){
 	e.preventDefault();
-	socket.send('message',JSON.stringify({type:"give_up", data:{task_id: $(this).attr("task_id")}}));
+	socket.emit('message',JSON.stringify({type:"give_up", data:{task_id: $(this).attr("task_id")}}));
 }
 
 function markCompletedClick(e){
 	e.preventDefault();
-	socket.send('message',JSON.stringify({type:"complete_task", data:{task_id: $(this).attr("task_id")}}));
+	socket.emit('message',JSON.stringify({type:"complete_task", data:{task_id: $(this).attr("task_id")}}));
 }
 
 function bindTaskButtons(user_id, the_task){
@@ -322,9 +322,9 @@ $(document).ready(function() {
 	document.title =  "Hakeru - " + pipeName;
 		
 	socket = new io.connect('http://node.hakeruapp.com');
-	socket.connect();
+	
 	socket.on('message', function(message){
-		//console.log(message);
+		console.log(message);
 		try {
 			var messageObj = JSON.parse(message);
 			console.log(messageObj);
@@ -337,7 +337,7 @@ $(document).ready(function() {
 	});
 	
 	socket.on('connect', function(message){		
-		socket.send('message',JSON.stringify({type: "sessionCheckIn", data: {pipe: pipeName, user_id: me.userId}}));
+		socket.emit('message',JSON.stringify({type: "sessionCheckIn", data: {pipe: pipeName, user_id: me.userId}}));
 	});
 	
 	
@@ -348,7 +348,7 @@ $(document).ready(function() {
 				if(msgText.length == 0) {
 					return false;
 				}
-				socket.send('message',JSON.stringify({type: identifyMessageType(msgText), data: {msg: msgText, group: identifyTaskGroup(msgText)}}));
+				socket.emit('message',JSON.stringify({type: identifyMessageType(msgText), data: {msg: msgText, group: identifyTaskGroup(msgText)}}));
 				$("#msg").val("");
 				scrollPaneToBottom($("#chatwrap .innercontent"), true, true);
 				return false;
@@ -568,16 +568,15 @@ function closePopup() {
 				var files = evt.target.files;
 				
 				for(var i = 0, len = files.length; i < len; i++) {
-			
-					//domElements[1].appendChild(document.createTextNode(files[i].fileName + " " + Math.round((files[i].fileSize/1024*100000)/100000)+"K "));
+					//domElements[1].appendChild(document.createTextNode(files[i].name + " " + Math.round((files[i].size/1024*100000)/100000)+"K "));
 					//domElements[0].id = "item"+i;
 
-					if(files[i].fileSize != 0) {
+					if(files[i].size != 0) {
 						
 					
 						var gritterIndex = $.gritter.add({
 							// (string | mandatory) the heading of the notification
-							title: 'Uploading ' + files[i].fileName,
+							title: 'Uploading ' + files[i].name,
 							// (string | mandatory) the text inside the notification
 							text: '<div id="item'+i+'">0%</div>',
 		
@@ -608,7 +607,7 @@ function closePopup() {
 				}, false);
 				
 				fileUpload.addEventListener("load", function(event) {
-					$('#item'+index).text("Upload completed. Now sharing " + file.fileName);
+					$('#item'+index).text("Upload completed. Now sharing " + file.name);
 					setTimeout(function(){$.gritter.remove(gritterIndex, { 
 						fade: true, // optional
 					})}, 1000);
@@ -617,7 +616,7 @@ function closePopup() {
 				fileUpload.addEventListener("error", function(evt) {
 					$.gritter.add({
 						// (string | mandatory) the heading of the notification
-						title: 'Failed uploading ' + files[i].fileName,
+						title: 'Failed uploading ' + files[i].name,
 						// (string | mandatory) the text inside the notification
 						text: 'Unknown error'
 					});
@@ -628,8 +627,8 @@ function closePopup() {
 				xhr.setRequestHeader("If-Modified-Since", "Mon, 26 Jul 1997 05:00:00 GMT");
 				xhr.setRequestHeader("Cache-Control", "no-cache");
 				xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-				xhr.setRequestHeader("X-File-Name", file.fileName);
-				xhr.setRequestHeader("X-File-Size", file.fileSize);
+				xhr.setRequestHeader("X-File-Name", file.name);
+				xhr.setRequestHeader("X-File-Size", file.size);
 				xhr.setRequestHeader("X-Client-Id", me.sessionId);
 				xhr.setRequestHeader("X-Php-Id", me.userId);
 				

@@ -27,10 +27,8 @@
 		}
 		 
 		if(file_put_contents('uploads/'.$file->name, $file->content) != FALSE) {
-			 $ch = get_web_page("http://node.hakeruapp.com/upload?url=http://hakeruapp.com/uploads/".urlencode($file->name)."&size=".$_SERVER[HTTP_X_FILE_SIZE]."&userId=".urlencode($_SERVER[HTTP_X_PHP_ID])."&sessionId=". $_SERVER[HTTP_X_CLIENT_ID]); 
-	print_r( $ch);
-
-		}
+			 $ch = get_web_page("http://node.hakeruapp.com/upload?url=http://hakeruapp.com/uploads/".urlencode($file->name)."&size=".$_SERVER[HTTP_X_FILE_SIZE]."&phpId=".urlencode($_SERVER[HTTP_X_PHP_ID])."&sessionId=". $_SERVER[HTTP_X_CLIENT_ID]); 
+    }
 	}
 	
 	

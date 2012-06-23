@@ -28,9 +28,8 @@ var messageHandlers = new Object();
 messageHandlers['sessionCheckIn'] = function(client, data){
 	clientPipeDictionary[client.sessionId] = data.pipe;
 	
-	client.phpId = data.phpId;
-
-    if(!(data.pipe in conferencePipes)) {
+	client.phpId = data.user_id;
+  if(!(data.pipe in conferencePipes)) {
 		conferencePipes[data.pipe] = new Pipe(data.pipe);
 		conferencePipes[data.pipe].construct(client);
 		console.log("Creating new pipe " + data.pipe);
@@ -39,7 +38,7 @@ messageHandlers['sessionCheckIn'] = function(client, data){
 		var newPipe = false;
 	}
 	conferencePipes[data.pipe].addClient(client);
-	conferencePipes[data.pipe].sendToOthers('user_joined', {client_id:client.phpId, client_name: client.name}, client.sessionId);
+	conferencePipes[data.pipe].sendToOthers('user_joined', {user_id:client.phpId, client_name: client.name}, client.sessionId);
 	if(!newPipe){
 		client.emit('message', JSON.stringify({type:'zip' , data: {sessionId: client.sessionId, zipped: conferencePipes[data.pipe].zip()}}));
 	}
@@ -48,8 +47,8 @@ messageHandlers['sessionCheckIn'] = function(client, data){
 // Handle chat
 messageHandlers['chat'] = function(client, data){
     var clientPipe = conferencePipes[clientPipeDictionary[client.sessionId]];
-	clientPipe.bufferMessage({msg: encodeHTML(data.msg), client_id: client.phpId, client_name: client.name});
-	clientPipe.send('chat', {msg: encodeHTML(data.msg), client_id: client.phpId, client_name: client.name});
+	clientPipe.bufferMessage({msg: encodeHTML(data.msg), user_id: client.phpId, client_name: client.name});
+	clientPipe.send('chat', {msg: encodeHTML(data.msg), user_id: client.phpId, client_name: client.name});
 }
 
 messageHandlers['new_task'] = function(client, data){
@@ -61,39 +60,39 @@ messageHandlers['new_task'] = function(client, data){
 	}
 		
 	var theTask = clientPipe.newTask(encodeHTML(msg), data.group);
-	clientPipe.send('new_task', {msg: encodeHTML(data.msg.slice(1)), the_task: theTask, client_id: client.phpId, client_name: client.name});
+	clientPipe.send('new_task', {msg: encodeHTML(data.msg.slice(1)), the_task: theTask, user_id: client.phpId, client_name: client.name});
 }
 
 messageHandlers['accept_task'] = function(client, data){
 	var clientPipe = conferencePipes[clientPipeDictionary[client.sessionId]];
 	var theTask = clientPipe.acceptTask(data.task_id, client.phpId);
-	clientPipe.send('accept_success', {the_task: theTask, client_id:client.phpId, client_name: client.name});
+	clientPipe.send('accept_success', {the_task: theTask, user_id:client.phpId, client_name: client.name});
 }
 
 messageHandlers['complete_task'] = function(client, data){
 	console.log("RECEIVING COMPLETION REQUEST");
 	var clientPipe = conferencePipes[clientPipeDictionary[client.sessionId]];
 	var theTask = clientPipe.completeTask(data.task_id, client.phpId);
-	clientPipe.send('task_completed', {the_task: theTask, client_id:client.phpId, client_name: client.name});
+	clientPipe.send('task_completed', {the_task: theTask, user_id:client.phpId, client_name: client.name});
 }
 
 messageHandlers['give_up'] = function(client, data){
 	var clientPipe = conferencePipes[clientPipeDictionary[client.sessionId]];
 	var theTask = clientPipe.giveUpTask(data.task_id, client.phpId);
-	clientPipe.send('given_up', {the_task: theTask, client_id:client.phpId, client_name: client.name});
+	clientPipe.send('given_up', {the_task: theTask, user_id:client.phpId, client_name: client.name});
 }
 
 messageHandlers['delete_task'] = function(client, data){
 	var clientPipe = conferencePipes[clientPipeDictionary[client.sessionId]];
 	var theTask = clientPipe.deleteTask(data.task_id, client.phpId);
-	clientPipe.send('deleted_task', {the_task: theTask, client_id:client.phpId, client_name: client.name});
+	clientPipe.send('deleted_task', {the_task: theTask, user_id:client.phpId, client_name: client.name});
 }
 
 
 
 function handleNewConnection(client){
 	client.on('message', function(message){	    
-	console.log('Message Received');   
+    console.log('Message Received', message);   
 		var messageObj = JSON.parse(message);
 		if(messageObj != null && "type" in messageObj && messageObj.type in messageHandlers) {
 		    messageHandlers[messageObj.type](client, messageObj.data);
@@ -111,7 +110,7 @@ function handleDisconnection(client) {
 	if(pipe != null && "removeClient" in pipe) {
 		pipe.removeClient(client);
 		if(!pipe.hasClient(client.phpId)){
-			pipe.send('gone', {client_id: client.phpId});
+			pipe.send('gone', {user_id: client.phpId});
 		}
 		if(pipe.members() == 0) {
 		//	delete conferencePipes[clientPipeDictionary[client.sessionId]];
@@ -123,14 +122,14 @@ function handleDisconnection(client) {
 }
 
 function handleHttp(req, res){
-	requestInfo= require('url').parse(req.url, true);
+	var requestInfo = require('url').parse(req.url, true);
 	if(requestInfo.pathname == "/upload" && 'query' in requestInfo && 'sessionId' in requestInfo.query && 'phpId' in requestInfo.query && 'url' in requestInfo.query && 'size' in requestInfo.query){
 		console.log("RECEIVING UPLOAD");
 		var clientPipe = conferencePipes[clientPipeDictionary[requestInfo.query.sessionId]];
 		
-		var fileObj = {file_url: requestInfo.query.url, client_id: requestInfo.query.phpId, size: requestInfo.query.size, pipe:clientPipeDictionary[requestInfo.query.sessionId]};
+		var fileObj = {file_url: requestInfo.query.url, user_id: requestInfo.query.phpId, size: requestInfo.query.size, pipe:clientPipeDictionary[requestInfo.query.sessionId]};
 		
-		clientPipe.send('file_upload', {file_url: requestInfo.query.url, client_id: requestInfo.query.phpId, size: requestInfo.query.size});
+		clientPipe.send('file_upload', {file_url: requestInfo.query.url, user_id: requestInfo.query.phpId, size: requestInfo.query.size});
 		clientPipe.newFile(fileObj);
 		clientPipe.files.push(fileObj);
 		
@@ -145,9 +144,10 @@ server.listen(8003);
 
 
 // Start socket.io
-var io = io.listen(server);
+var io = io.listen(server, {'log level': 1});
 		
 io.sockets.on('connection', function(client){
+  client.sessionId = client.id;
 	handleNewConnection(client);
 });
 

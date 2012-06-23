@@ -161,6 +161,7 @@ div {outline: 0; border: 0;}
 	padding: 4px;
 	border-bottom: 1px solid #fefefe;
 	background-color: #eee;
+  overflow: hidden;
 }
 
 .useractive {
